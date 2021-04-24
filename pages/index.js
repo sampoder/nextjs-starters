@@ -1,16 +1,28 @@
-import { Page, Text, Image } from "@geist-ui/react";
+import {
+  Page,
+  Card,
+  Text,
+  Image,
+  Input,
+  ButtonGroup,
+  Avatar,
+  Grid,
+  Button,
+} from "@geist-ui/react";
+import { Terminal } from "@geist-ui/react-icons";
 
 export default function Home() {
   return (
     <Page dotBackdrop>
       <Page.Header>
-        <Text h1 style={{fontWeight: '600'}}>
+        <Text h1 style={{ fontWeight: "600", textAlign: "center" }}>
           {" "}
+          Get Building with These{" "}
           <div
             style={{
               width: "1em",
               height: "1em",
-              marginRight: "0.4em",
+              marginRight: "0em",
               display: "inline-block",
               verticalAlign: "text-top",
             }}
@@ -20,12 +32,82 @@ export default function Home() {
               style={{ height: "1em", display: "inline-block", width: "1em" }}
             />
           </div>
-          Get Building with These <span style={{ fontWeight: '800'}}>Next.js</span> Starters
+          <span style={{ fontWeight: "800" }}> Next.js</span> Starters
         </Text>
       </Page.Header>
-      <Text>
-        Hello, I am using <Text b>Geist UI</Text> !
-      </Text>
+      <div style={{ marginBottom: "8px", marginTop: "24px" }}>
+        <Input
+          size="large"
+          placeholder="Search Starters"
+          width="100%"
+          style={{ margin: "8pt 8pt" }}
+        />
+      </div>
+      {Array.from(Array(100).keys()).map((x) => (
+      <Card
+        style={{
+          borderRadius: x != 0 ? "0px" : '',
+          borderBottomLeftRadius: x != 99 ? "0px" : "5px",
+          borderBottomRightRadius: x != 99 ? "0px" : "5px",
+          borderTop: x != 0 ? "none" : '',
+          
+        }}
+      >
+        <Grid.Container gap={0} justify="center">
+          <Grid xs style={{ alignItems: "center" }}>
+            {" "}
+            <p style={{ marginBlockStart: "0em", marginBlockEnd: "0em" }}>
+              <Avatar
+                src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+                stacked
+              />
+              <Avatar
+                src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+                stacked
+              />
+              <Avatar
+                src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+                stacked
+              />
+              <Avatar
+                src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+                stacked
+              />
+              <b style={{ marginLeft: "12px" }}>activeClassName Example</b>
+            </p>
+          </Grid>
+          <Grid xs style={{ textAlign: "right" }}>
+            <ButtonGroup
+              ghost
+              type="success"
+              style={{ marginLeft: "auto" }}
+              size="small"
+            >
+              <Button size="small">
+                {" "}
+                <Terminal size={16} className="icon-next-app" />{" "}
+                <span style={{ marginRight: "4px" }}></span>
+                Use Create Next App
+              </Button>
+              <Button size="small">
+                ▲ <span style={{ marginRight: "6px" }}></span>Deploy to Vercel
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid.Container>
+      </Card>))}
+      <style>
+        {`
+      .content{
+        padding: 8pt 8pt!important
+      }
+      .icon-next-app{
+      transform: translateY(1px)
+      }
+      .avatar-group{
+        display: inline-flex!important;
+      }`}
+      </style>
     </Page>
   );
 }
