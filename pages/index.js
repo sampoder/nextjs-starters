@@ -42,11 +42,12 @@ function CardItem({ x, search }) {
         display: item.name.includes(search) ? 'inherit' : 'none'
       }}
     >
-      <Grid.Container gap={0} justify="center">
+      <Grid.Container gap={0} justify="center" className="xs-justify-left">
         <Grid
-          xs
+          md
           style={{ alignItems: "center", cursor: "pointer" }}
           onClick={() => setOpen(!open)}
+          
         >
           {" "}
           <p style={{ marginBlockStart: "0em", marginBlockEnd: "0em" }}>
@@ -105,6 +106,7 @@ function CardItem({ x, search }) {
           <ButtonGroup
             ghost
             type="success"
+            className="xs-margin-left-none"
             style={{ marginLeft: "auto" }}
             size="small"
           >
@@ -128,7 +130,7 @@ function CardItem({ x, search }) {
               {" "}
               <Terminal size={16} className="icon-next-app" />{" "}
               <span style={{ marginRight: "4px" }}></span>
-              Use Create Next App
+              <span className="hide-xs">Use </span>Create Next App
             </Button>
             <Button
               size="small"
@@ -138,7 +140,7 @@ function CardItem({ x, search }) {
                 )[0])
               }
             >
-              ▲ <span style={{ marginRight: "6px" }}></span>Deploy to Vercel
+              ▲ <span style={{ marginRight: "6px" }}></span><span className="hide-xs">Deploy to {' '}</span>Vercel
             </Button>
           </ButtonGroup>
         </Grid>
@@ -272,6 +274,21 @@ export default function Home() {
       }
       .deploy-header + p + p{
         display: none;
+      }
+      .hide-xs{
+        margin-right: 4px
+      }
+      @media screen and (max-width: 650px) {
+        .hide-xs{
+          display: none;
+        }
+        .xs-margin-left-none{
+          margin-left: 0px!important;
+          margin-top: 12px!important
+        }
+        .xs-justify-left{
+          justify-content: left!important
+        }
       }
       
       .markdown-body h1:first-child {
