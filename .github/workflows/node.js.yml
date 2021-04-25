@@ -1,0 +1,40 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+     - cron: 0 */4 * * *
+  workflow_dispatch: 
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [15.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: create env file
+      run: |
+        touch .env
+        echo key =${{ secrets.key }} >> .env
+
+    - run: yarn --frozen-lockfile
+    - run: git clone https://github.com/vercel/next.js
+    - run: node lib/fetch.js
+    
+    - name: Push to GitHub
+      run: |
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Data Update!"
+        git add .
+        git commit -m "Data Update!" || true
+        git push
