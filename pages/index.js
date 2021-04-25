@@ -35,10 +35,10 @@ function CardItem({ x }) {
   return (
     <Card
       style={{
-        borderRadius: x != 0 ? "0px" : "",
-        borderBottomLeftRadius: x != data.length - 1 ? "0px" : "5px",
-        borderBottomRightRadius: x != data.length - 1 ? "0px" : "5px",
-        borderTop: x != 0 ? "none" : "",
+        borderRadius: "0px",
+        borderTop: "0px",
+        borderLeft: "0px",
+        borderRight: "0px",
       }}
     >
       <Grid.Container gap={0} justify="center">
@@ -172,6 +172,7 @@ function CardItem({ x }) {
 
 export default function Home() {
   const [search, setSearch] = useState("");
+  
   return (
     <Page dotBackdrop>
       <Page.Header>
@@ -212,16 +213,16 @@ export default function Home() {
           size="large"
           placeholder="Search Starters"
           width="100%"
-          value={search}
           onInput={(e) => setSearch(e.target.value)}
           style={{ margin: "8pt 8pt", background: 'white' }}
         />
       </div>
+      <div className='cards' style={{ borderRadius: '5px', border: '1px solid #eaeaea', borderBottom: '0px', overflow: 'hidden'}}>
       {data.map((item, index) => {
         if (item.name.includes(search)) {
           return <CardItem x={index} item={item} />;
         }
-      })}
+      })}</div>
       <div style={{ textAlign: "center", marginTop: "16px" }}>
         Built by <Code>@sampoder</Code>. Examples sourced from{" "}
         <Code>vercel/next.js</Code>. <br />{" "}
@@ -257,6 +258,7 @@ export default function Home() {
       .deploy-header + p + p{
         display: none;
       }
+      
       .markdown-body h1:first-child {
         display: none;
     }
