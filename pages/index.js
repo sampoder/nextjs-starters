@@ -24,7 +24,7 @@ const formatLinks = (source) => {
   return source.replace(reUrl, "$1[$2]($2)$3");
 };
 
-function CardItem({ x }) {
+function CardItem({ x, search }) {
   const [toasts, setToast] = useToasts();
   let item = data[x];
   if (item.contributors.length == 0) {
@@ -39,6 +39,7 @@ function CardItem({ x }) {
         borderTop: "0px",
         borderLeft: "0px",
         borderRight: "0px",
+        display: item.name.includes(search) ? 'inherit' : 'none'
       }}
     >
       <Grid.Container gap={0} justify="center">
@@ -172,7 +173,7 @@ function CardItem({ x }) {
 
 export default function Home() {
   const [search, setSearch] = useState("");
-  
+
   return (
     <Page dotBackdrop>
       <Page.Header>
@@ -214,18 +215,32 @@ export default function Home() {
           placeholder="Search Starters"
           width="100%"
           onInput={(e) => setSearch(e.target.value)}
-          style={{ margin: "8pt 8pt", background: 'white' }}
+          style={{ margin: "8pt 8pt", background: "white" }}
         />
       </div>
-      <div className='cards' style={{ borderRadius: '5px', border: '1px solid #eaeaea', borderBottom: '0px', overflow: 'hidden'}}>
-      {data.map((item, index) => {
-        if (item.name.includes(search)) {
-          return <CardItem x={index} item={item} />;
-        }
-      })}</div>
+      <div
+        className="cards"
+        style={{
+          borderRadius: "5px",
+          border: "1px solid #eaeaea",
+          borderBottom: "0px",
+          overflow: "hidden",
+        }}
+      >
+        {data.map((item, index) => {
+          return <CardItem x={index} item={item} search={search} />;
+        })}
+      </div>
       <div style={{ textAlign: "center", marginTop: "16px" }}>
-        Built by <a href="https://github.com/sampoder"><Code>@sampoder</Code></a>. Examples sourced from{" "}
-        <a href="https://github.com/vercel/next.js"><Code>vercel/next.js</Code></a>. <br />{" "}
+        Built by{" "}
+        <a href="https://github.com/sampoder">
+          <Code>@sampoder</Code>
+        </a>
+        . Examples sourced from{" "}
+        <a href="https://github.com/vercel/next.js">
+          <Code>vercel/next.js</Code>
+        </a>
+        . <br />{" "}
         <Text small>
           The Next.js logo is a trademark of Vercel, this site has no
           affiliation with Vercel.
