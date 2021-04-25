@@ -224,8 +224,8 @@ export default function Home() {
         }
       })}</div>
       <div style={{ textAlign: "center", marginTop: "16px" }}>
-        Built by <Code>@sampoder</Code>. Examples sourced from{" "}
-        <Code>vercel/next.js</Code>. <br />{" "}
+        Built by <a href="https://github.com/sampoder"><Code>@sampoder</Code></a>. Examples sourced from{" "}
+        <a href="https://github.com/vercel/next.js"><Code>vercel/next.js</Code></a>. <br />{" "}
         <Text small>
           The Next.js logo is a trademark of Vercel, this site has no
           affiliation with Vercel.
