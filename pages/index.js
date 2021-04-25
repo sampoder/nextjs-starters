@@ -12,8 +12,12 @@ import {
 import { Terminal } from "@geist-ui/react-icons";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import data from "../final.json";
 
-function CardItem({ x }) {
+function CardItem({ x, item }) {
+  if (item.contributors.length == 0) {
+    console.log(item);
+  }
   const [open, setOpen] = useState(false);
   return (
     <Card
@@ -29,22 +33,38 @@ function CardItem({ x }) {
           {" "}
           <p style={{ marginBlockStart: "0em", marginBlockEnd: "0em" }}>
             <Avatar
-              src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+              src={`_next/image?url=${
+                typeof item.contributors[3] != "undefined"
+                  ? `https://github.com/${item.contributors[3][0]}.png`
+                  : `http://identicon.rmhdev.net/${item.name}3.png`
+              }&w=32&q=75`}
+              loading="lazy"
               stacked
             />
             <Avatar
-              src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+              src={`_next/image?url=${
+                typeof item.contributors[2] != "undefined"
+                  ? `https://github.com/${item.contributors[2][0]}.png`
+                  : `http://identicon.rmhdev.net/${item.name}2.png`
+              }&w=32&q=75`}
+              loading="lazy"
               stacked
             />
             <Avatar
-              src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+              src={`_next/image?url=${
+                typeof item.contributors[1] != "undefined"
+                  ? `https://github.com/${item.contributors[1][0]}.png`
+                  : `http://identicon.rmhdev.net/${item.name}1.png`
+              }&w=32&q=75`}
+              loading="lazy"
               stacked
             />
             <Avatar
-              src={"https://avatars.githubusercontent.com/u/4278345?v=4"}
+              src={`_next/image?url=${`https://github.com/${item.contributors[0][0]}.png`}&w=32&q=75`}
+              loading="lazy"
               stacked
             />
-            <b style={{ marginLeft: "12px" }}>activeClassName Example</b>
+            <b style={{ marginLeft: "12px" }}>{item.name}</b>
           </p>
         </Grid>
         <Grid xs style={{ textAlign: "right" }}>
@@ -68,27 +88,7 @@ function CardItem({ x }) {
       </Grid.Container>
       {open ? (
         <p className="markdown-body">
-          <ReactMarkdown>{`# activeClassName example
-
-ReactRouter has a convenience property on the \`Link\` element to allow an author to set the _active_ className on a link. This example replicates that functionality using Next's own \`Link\`.
-
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/active-class-name&project-name=active-class-name&repository-name=active-class-name)
-
-## How to use
-
-Execute [\`create-next-app\`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-\`\`\`bash
-npx create-next-app --example active-class-name active-class-name-app
-# or
-yarn create next-app --example active-class-name active-class-name-app
-\`\`\`
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).`}</ReactMarkdown>
+          <ReactMarkdown>{item.description}</ReactMarkdown>
         </p>
       ) : (
         ""
@@ -98,6 +98,7 @@ Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&ut
 }
 
 export default function Home() {
+  console.log(data.length);
   return (
     <Page dotBackdrop>
       <Page.Header>
@@ -129,8 +130,8 @@ export default function Home() {
           style={{ margin: "8pt 8pt" }}
         />
       </div>
-      {Array.from(Array(100).keys()).map((x) => (
-        <CardItem x={x} />
+      {data.map((item, index) => (
+        <CardItem x={index} item={item} />
       ))}
       <style>
         {`

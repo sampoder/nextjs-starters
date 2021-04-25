@@ -10,6 +10,9 @@
   "dependencies": {
     "@geist-ui/react": "latest",
     "@geist-ui/react-icons": "^1.0.1",
+    "@octokit/graphql": "^4.6.1",
+    "dotenv": "^8.2.0",
+    "download-git-repo": "^3.0.2",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
