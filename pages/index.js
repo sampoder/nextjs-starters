@@ -13,8 +13,16 @@ import { Terminal } from "@geist-ui/react-icons";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import data from "../final.json";
+import rehypeRaw from "rehype-raw";
+const parse = require("parse-markdown-links");
 
-function CardItem({ x, item }) {
+const formatLinks = (source) => {
+  const reUrl = /([^\[\(])(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}[-a-zA-Z0-9@:%_\+.~#?&//=]*)([^\]\)])/g;
+  return source.replace(reUrl, "$1[$2]($2)$3");
+};
+
+function CardItem({ x }) {
+  let item = data[x];
   if (item.contributors.length == 0) {
     console.log(item);
   }
@@ -28,7 +36,12 @@ function CardItem({ x, item }) {
         borderTop: x != 0 ? "none" : "",
       }}
     >
-      <Grid.Container gap={0} justify="center" onClick={() => setOpen(!open)}>
+      <Grid.Container
+        gap={0}
+        justify="center"
+        onClick={() => setOpen(!open)}
+        style={{ cursor: "pointer" }}
+      >
         <Grid xs style={{ alignItems: "center" }}>
           {" "}
           <p style={{ marginBlockStart: "0em", marginBlockEnd: "0em" }}>
@@ -39,6 +52,11 @@ function CardItem({ x, item }) {
                   : `http://identicon.rmhdev.net/${item.name}3.png`
               }&w=32&q=75`}
               loading="lazy"
+              alt={`${
+                typeof item.contributors[3] != "undefined"
+                  ? item.contributors[3][0]
+                  : `Unknown`
+              }'s profile picture`}
               stacked
             />
             <Avatar
@@ -47,6 +65,11 @@ function CardItem({ x, item }) {
                   ? `https://github.com/${item.contributors[2][0]}.png`
                   : `http://identicon.rmhdev.net/${item.name}2.png`
               }&w=32&q=75`}
+              alt={`${
+                typeof item.contributors[2] != "undefined"
+                  ? item.contributors[2][0]
+                  : `Unknown`
+              }'s profile picture`}
               loading="lazy"
               stacked
             />
@@ -56,12 +79,18 @@ function CardItem({ x, item }) {
                   ? `https://github.com/${item.contributors[1][0]}.png`
                   : `http://identicon.rmhdev.net/${item.name}1.png`
               }&w=32&q=75`}
+              alt={`${
+                typeof item.contributors[1] != "undefined"
+                  ? item.contributors[1][0]
+                  : `Unknown`
+              }'s profile picture`}
               loading="lazy"
               stacked
             />
             <Avatar
               src={`_next/image?url=${`https://github.com/${item.contributors[0][0]}.png`}&w=32&q=75`}
               loading="lazy"
+              alt={`${item.contributors[0][0]}'s profile picture`}
               stacked
             />
             <b style={{ marginLeft: "12px" }}>{item.name}</b>
@@ -80,7 +109,14 @@ function CardItem({ x, item }) {
               <span style={{ marginRight: "4px" }}></span>
               Use Create Next App
             </Button>
-            <Button size="small">
+            <Button
+              size="small"
+              onClick={() =>
+                (window.location = parse(item.description).filter((word) =>
+                  word.includes("https://vercel.com/new/git/external")
+                )[0])
+              }
+            >
               ▲ <span style={{ marginRight: "6px" }}></span>Deploy to Vercel
             </Button>
           </ButtonGroup>
@@ -88,7 +124,24 @@ function CardItem({ x, item }) {
       </Grid.Container>
       {open ? (
         <p className="markdown-body">
-          <ReactMarkdown>{item.description}</ReactMarkdown>
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {formatLinks(item.description)
+              .replace(/(!\[.*?\]\()(.+?)(\))/g, function (whole, a, b, c) {
+                return (
+                  a +
+                  (b.includes("http")
+                    ? ""
+                    : `https://github.com/vercel/next.js/raw/canary/examples/${item.name}/`) +
+                  b.replace("./", "") +
+                  c
+                );
+              })
+              .replace("## Deploy your own", '<h2 class="deploy-header"></h2>')
+              .replace(
+                "Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).",
+                ""
+              )}
+          </ReactMarkdown>
         </p>
       ) : (
         ""
@@ -150,6 +203,15 @@ export default function Home() {
       .markdown-body h1, h2, h3, h4, h5, h6{
         font-size: 1.3em;
         font-weight: 600;
+      }
+      .deploy-header{
+        display: none;
+      }
+      .deploy-header + p{
+        display: none;
+      }
+      .deploy-header + p + p{
+        display: none;
       }
       .markdown-body h1:first-child {
         display: none;

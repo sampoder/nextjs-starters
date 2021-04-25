@@ -14,8 +14,11 @@
     "dotenv": "^8.2.0",
     "download-git-repo": "^3.0.2",
     "next": "latest",
+    "parse-markdown-links": "^1.0.4",
     "react": "latest",
     "react-dom": "latest",
-    "react-markdown": "^6.0.1"
+    "react-markdown": "^6.0.1",
+    "react-virtualized": "^9.22.3",
+    "rehype-raw": "^5.1.0"
   }
 }
