@@ -6,12 +6,15 @@ import {
   Input,
   ButtonGroup,
   Avatar,
+  Code,
   Grid,
   Button,
+  useToasts,
 } from "@geist-ui/react";
 import { Terminal } from "@geist-ui/react-icons";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { useClipboard } from "use-clipboard-copy";
 import data from "../final.json";
 import rehypeRaw from "rehype-raw";
 const parse = require("parse-markdown-links");
@@ -22,11 +25,13 @@ const formatLinks = (source) => {
 };
 
 function CardItem({ x }) {
+  const [toasts, setToast] = useToasts();
   let item = data[x];
   if (item.contributors.length == 0) {
     console.log(item);
   }
   const [open, setOpen] = useState(false);
+  const clipboard = useClipboard();
   return (
     <Card
       style={{
@@ -36,13 +41,12 @@ function CardItem({ x }) {
         borderTop: x != 0 ? "none" : "",
       }}
     >
-      <Grid.Container
-        gap={0}
-        justify="center"
-        onClick={() => setOpen(!open)}
-        style={{ cursor: "pointer" }}
-      >
-        <Grid xs style={{ alignItems: "center" }}>
+      <Grid.Container gap={0} justify="center">
+        <Grid
+          xs
+          style={{ alignItems: "center", cursor: "pointer" }}
+          onClick={() => setOpen(!open)}
+        >
           {" "}
           <p style={{ marginBlockStart: "0em", marginBlockEnd: "0em" }}>
             <Avatar
@@ -103,7 +107,23 @@ function CardItem({ x }) {
             style={{ marginLeft: "auto" }}
             size="small"
           >
-            <Button size="small">
+            <Button
+              size="small"
+              onClick={() => {
+                setToast({
+                  text: (
+                    <p style={{ wordWrap: "normal" }}>
+                      Copied{" "}
+                      <Code
+                        style={{ wordWrap: "break-word" }}
+                      >{`npx create-next-app -e ${item.name}`}</Code>{" "}
+                      to the clipboard.
+                    </p>
+                  ),
+                });
+                clipboard.copy(`npx create-next-app -e ${item.name}`);
+              }}
+            >
               {" "}
               <Terminal size={16} className="icon-next-app" />{" "}
               <span style={{ marginRight: "4px" }}></span>
